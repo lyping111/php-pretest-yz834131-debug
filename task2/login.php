@@ -1,11 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+<?php
+include "db.php";
+
+$username = $_POST['username'];
+$password = $_POST['password'];
+
+$sql = "SELECT * FROM users
+WHERE username='$username'
+AND password='$password'";
+
+$result = $conn->query($sql);
+
+if($result->num_rows > 0){
+    echo "Login Successful!";
+}else{
+    echo "Invalid Username or Password!";
+}
+
+$conn->close();
+?>
