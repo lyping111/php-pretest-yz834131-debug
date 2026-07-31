@@ -1,51 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Shipping System</title>
-</head>
-<body>
+CREATE DATABASE warehouse_db;
 
-<h2>Shipping Form</h2>
+USE warehouse_db;
 
-<form action="insert.php" method="post">
-    Receiving Date:
-    <input type="date" name="receiving_date"><br><br>
+CREATE TABLE receiving (
+    receiving_date DATE,
+    tracking_number VARCHAR(30) PRIMARY KEY,
+    product_name VARCHAR(100),
+    cbm DECIMAL(5,2),
+    weight DECIMAL(6,2)
+);
 
-    Tracking Number:
-    <input type="text" name="tracking_number"><br><br>
+INSERT INTO receiving VALUES
+('2026-07-01','TRK1001','Laptop',0.50,8.50),
+('2026-07-02','TRK1002','Keyboard',0.10,1.20),
+('2026-07-03','TRK1003','Mouse',0.05,0.50),
+('2026-07-04','TRK1004','Monitor',0.80,6.80),
+('2026-07-05','TRK1005','Printer',1.20,12.50),
+('2026-07-06','TRK1006','Speaker',0.30,3.20);
 
-    Product Name:
-    <input type="text" name="product_name"><br><br>
+UPDATE receiving
+SET weight = 9.00
+WHERE tracking_number = 'TRK1001';
 
-    CBM:
-    <input type="text" name="cbm"><br><br>
+DELETE FROM receiving
+WHERE tracking_number = 'TRK1006';
 
-    Weight:
-    <input type="text" name="weight"><br><br>
+SELECT *
+FROM receiving
+WHERE weight > 5;
 
-    <input type="submit" value="Insert">
-</form>
+SELECT *
+FROM receiving
+ORDER BY receiving_date DESC;
 
-</body>
-</html>
+ALTER TABLE receiving
+ADD supplier VARCHAR(100);
 
-<?php
-$conn = new mysqli("localhost","root","","shipping_db");
+ALTER TABLE receiving
+DROP COLUMN supplier;
 
-$receiving_date = $_POST['receiving_date'];
-$tracking_number = $_POST['tracking_number'];
-$product_name = $_POST['product_name'];
-$cbm = $_POST['cbm'];
-$weight = $_POST['weight'];
-
-$sql = "INSERT INTO shipping(receiving_date,tracking_number,product_name,cbm,weight)
-VALUES('$receiving_date','$tracking_number','$product_name','$cbm','$weight')";
-
-if($conn->query($sql)){
-    echo "Data Inserted Successfully";
-}else{
-    echo "Insert Failed";
-}
-
-$conn->close();
-?>
+ALTER TABLE receiving
+MODIFY product_name VARCHAR(150);
